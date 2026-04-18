@@ -213,6 +213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   health: 10
+  healthUI: {fileID: 0}
   canTakeDamage: 1
   rb: {fileID: 2344733947857287906}
   groundCheck: {fileID: 8232800804449079710}
@@ -235,15 +236,14 @@ MonoBehaviour:
   pistol: 1
   pistolAmmo: 12
   pistolReserve: 36
+  pistolFireRate: 2
   SMG: 0
   smgAmmo: 30
-  smgReserve: 90
-  isReloading: 0
+  smgReserve: 30
+  smgFireRate: 5
   Bullet: {fileID: 2823706215993380080, guid: 3abef0bdc534a4c4fa98b05c71283274, type: 3}
   bulletSpeed: 1200
   shootPoint: {fileID: 1242863327545600592}
-  pistolFireRate: 2
-  smgFireRate: 5
   equippedWeapon: {fileID: 0}
   AmmoText: {fileID: 0}
 --- !u!1 &7922099957307469038
