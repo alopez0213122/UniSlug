@@ -9,20 +9,21 @@ public class Shooting : MonoBehaviour
     public bool pistol = true;
     public int pistolAmmo = 12;
     public int pistolReserve = 36;
-    public float pistolFireRate;
+    public float pistolFireRate;        // Shots per second
+    private float pistolFireRateTime;   // Seconds per shot
 
     [Header("SMG Settings")]
     public bool SMG = false;
     public int smgAmmo = 30;
     public int smgReserve = 30;
     public float smgFireRate;
+    private float smgFireRateTime; // Seconds per shot
 
     private bool isReloading = false;
 
 
     Vector2 mouseDirection;
-
-    public GameObject Bullet;
+    
     public float bulletSpeed;
 
     public Transform shootPoint;
@@ -33,22 +34,25 @@ public class Shooting : MonoBehaviour
     public TextMeshProUGUI equippedWeapon;
     public TextMeshProUGUI AmmoText;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+	private Camera mainCamera;
+
     void Start()
     {
-        
+        mainCamera = Camera.main;
+        pistolFireRateTime = 1 / pistolFireRate;
+        smgFireRateTime = 1 / smgFireRate;
+        AmmoCount();
     }
-
+    
     // Update is called once per frame
     void Update()
     {
         // Gets Mouse and its direction
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         mouseDirection = mousePos - (Vector2)Gun.position;
         FaceMouse();
 
         swapGuns();
-        AmmoCount();
 
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -61,7 +65,7 @@ public class Shooting : MonoBehaviour
             {
                 if (Time.time > ReadyToShoot)
                 {
-                    ReadyToShoot = Time.time + 1 / pistolFireRate;
+                    ReadyToShoot = Time.time + pistolFireRateTime;
                     Shoot();
                 }
             }
@@ -69,7 +73,7 @@ public class Shooting : MonoBehaviour
             {
                 if (Time.time > ReadyToShoot)
                 {
-                    ReadyToShoot = Time.time + 1 / smgFireRate;
+                    ReadyToShoot = Time.time + smgFireRateTime;
                     Shoot();
                 }
             }
@@ -92,12 +96,14 @@ public class Shooting : MonoBehaviour
             equippedWeapon.text = "Pistol";
             pistol = true;
             SMG = false;
+            AmmoCount();
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             equippedWeapon.text = "SMG";
             SMG = true;
             pistol = false;
+            AmmoCount();
         }
     }
 
@@ -112,9 +118,12 @@ public class Shooting : MonoBehaviour
             smgAmmo--;
         }
 
+        AmmoCount();
+        
         //Instantiate and shoot bullet
-        GameObject BulletIns = Instantiate(Bullet, shootPoint.position, shootPoint.rotation);
-        BulletIns.GetComponent<Rigidbody2D>().AddForce(BulletIns.transform.right * bulletSpeed);
+        Bullet BulletIns = BulletPool.Instance.GetBullet();
+        BulletIns.transform.SetPositionAndRotation(shootPoint.position, shootPoint.rotation);
+        BulletIns.rb.AddForce(BulletIns.transform.right * bulletSpeed);
     }
 
     private void AmmoCount() //Displays UI for Ammo
@@ -134,7 +143,6 @@ public class Shooting : MonoBehaviour
                 AmmoText.text = smgAmmo + "/" + smgReserve;
             }
         }
-
     }
 
     IEnumerator Reload()
@@ -142,18 +150,22 @@ public class Shooting : MonoBehaviour
         if (pistol && pistolReserve >= 12) //If pistol is equipped and 12 reserve bullets are available, reload from reserve and discard 12 ammo
         {
             isReloading = true;
+            AmmoCount();
             yield return new WaitForSeconds(1.5f);
             pistolReserve -= 12;
             pistolAmmo = 12;
             isReloading = false;
+            AmmoCount();
         }
         else if (SMG && smgReserve >= 30) //If SMG is equipped and 30 reserve bullets are available, reload from reserve and discard 30 ammo
         {
             isReloading = true;
+            AmmoCount();
             yield return new WaitForSeconds(2.5f);
             smgReserve -= 30;
             smgAmmo = 30;
             isReloading = false;
+            AmmoCount();
         }
     }
 }

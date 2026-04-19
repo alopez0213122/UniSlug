@@ -26,7 +26,6 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         shooting = GetComponent<Shooting>();
-
     }
 
     // Update is called once per frame
@@ -74,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet")) //If bullet collides with player, destroy the bullet and start takenDamage coroutine
         {
-            Destroy(collision.gameObject);
+            collision.gameObject.GetComponent<Bullet>().ReleaseBullet();
             if (canTakeDamage)
             {
                 StartCoroutine(TakenDamage());

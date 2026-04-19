@@ -14,14 +14,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         StartCoroutine(ChangeDirection());
     }
-
-    private void Update()
-    {
-        if (health <= 0) //if Enemy health reaches 0, destroy itself
-        {
-            Destroy(gameObject);
-        }
-    }
+    
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -32,7 +25,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet")) //If bullet collides with enemy, take damage and destroy the bullet
         {
-            Destroy(collision.gameObject);
+            collision.gameObject.GetComponent<Bullet>().ReleaseBullet();
             TakenDamage();
         }
         else //if enemy collides with anything, change direction
@@ -64,5 +57,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         Debug.Log("Enemy Taken Damage");
         health--;
+        if (health <= 0)
+            Destroy(gameObject);
     }
 }

@@ -1,25 +1,32 @@
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Bullet : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    public Rigidbody2D rb;
+    private IObjectPool<Bullet> bulletPool;
+    public IObjectPool<Bullet> BulletPool { set => bulletPool = value; }
+    private bool bIsReleased = false;
+    
     private void OnCollisionEnter2D(Collision2D collision) //Destroys if bullet hits a wall
     {
         if (collision.gameObject.CompareTag("Obstruction"))
         {
-            Destroy(gameObject);
+            ReleaseBullet();
         }
     }
 
+    public void SetIsReleased(bool value)
+    {
+        bIsReleased = value;
+    }
+
+    public void ReleaseBullet()
+    {
+        if (bIsReleased) return;
+        bIsReleased = true;
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0;
+        bulletPool.Release(this);
+    }
 }

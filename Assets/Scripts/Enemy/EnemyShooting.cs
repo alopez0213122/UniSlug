@@ -9,17 +9,17 @@ public class EnemyShooting : MonoBehaviour
     public bool pistol;
     public int pistolAmmo = 12;
     public float pistolFireRate;
+    private float pistolFireRateTime;
 
     [Header("SMG Settings")]
     public bool SMG;
     public int smgAmmo = 30;
     public bool isReloading;
     public float smgFireRate;
+    private float smgFireRateTime;
 
     [SerializeField] private float aggroRadius;
-
-
-    public GameObject Bullet;
+    
     public float bulletSpeed;
 
     public Transform shootPoint;
@@ -29,29 +29,23 @@ public class EnemyShooting : MonoBehaviour
 
     public GameObject player;
 
-    private bool isAggro;
+    private bool isAggro = false;
 
-
-    private void Awake()
+    private void Start()
     {
-        player = GameObject.FindWithTag("Player");
-    }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
+        player = GlobalReferences.Instance.GetPlayerObject();
+        pistolFireRateTime = 1 / pistolFireRate;
+        smgFireRateTime = 1 / smgFireRate;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float playerDistance = Vector2.Distance(transform.position, player.transform.position); //Gets player distance
-        if (playerDistance < aggroRadius) //Aggro's and starts shooting if the player is within aggro distance
+        if (isAggro) //Aggro's and starts shooting if the player is within aggro distance
         {
-            isAggro = true;
             AimAtPlayer();
 
-            if (pistolAmmo == 0 || smgAmmo == 0) //If enemy runs out of ammo, start reloading coroutine
+            if (!isReloading && (pistolAmmo == 0 || smgAmmo == 0)) //If enemy runs out of ammo, start reloading coroutine
             {
                 StartCoroutine(Reload());
             }
@@ -62,7 +56,7 @@ public class EnemyShooting : MonoBehaviour
                 {
                     if (Time.time > ReadyToShoot)
                     {
-                        ReadyToShoot = Time.time + 1f / pistolFireRate;
+                        ReadyToShoot = Time.time + pistolFireRateTime;
                         Shoot();
                     }
                 }
@@ -70,15 +64,11 @@ public class EnemyShooting : MonoBehaviour
                 {
                     if (Time.time > ReadyToShoot)
                     {
-                        ReadyToShoot = Time.time + 1f / smgFireRate;
+                        ReadyToShoot = Time.time + smgFireRateTime;
                         Shoot();
                     }
                 }
             }
-        }
-        else
-        {
-            isAggro = false;
         }
     }
 
@@ -98,8 +88,9 @@ public class EnemyShooting : MonoBehaviour
             smgAmmo--;
         }
 
-        GameObject BulletIns = Instantiate(Bullet, shootPoint.position, shootPoint.rotation);
-        BulletIns.GetComponent<Rigidbody2D>().AddForce(BulletIns.transform.right * bulletSpeed);
+        Bullet BulletIns = BulletPool.Instance.GetBullet();
+        BulletIns.transform.SetPositionAndRotation(shootPoint.position, shootPoint.rotation);
+        BulletIns.rb.AddForce(BulletIns.transform.right * bulletSpeed);
     }
 
     IEnumerator Reload() //Reloads based on what weapon is equipped
@@ -120,4 +111,13 @@ public class EnemyShooting : MonoBehaviour
         }
     }
 
+    public void SetAggro(bool value)
+    {
+        isAggro = value;
+    }
+
+    public float GetAggroRadius()
+    {
+        return aggroRadius;
+    }
 }

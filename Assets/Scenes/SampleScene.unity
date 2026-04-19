@@ -1652,6 +1652,67 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f95e2e790d811b4a9798655a0c6e25d, type: 3}
+--- !u!1 &937155091
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 937155093}
+  - component: {fileID: 937155092}
+  - component: {fileID: 937155094}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &937155092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 937155091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 112c2c40303944d1947e19cad8020d92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BulletPool
+  bulletPrefab: {fileID: 9169371630399099201, guid: 3abef0bdc534a4c4fa98b05c71283274, type: 3}
+  defaultBulletPoolCapacity: 50
+  bulletPoolMaxSize: 100
+--- !u!4 &937155093
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 937155091}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &937155094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 937155091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11860592f79a4972b1912861cc429583, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlobalReferences
+  playerGameObject: {fileID: 2147001882}
 --- !u!4 &939574796 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2676331542419130037, guid: 4636ce69756ac12439e434050a96f712, type: 3}
@@ -4265,6 +4326,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2147001882 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6801570761370706988, guid: 4636ce69756ac12439e434050a96f712, type: 3}
+  m_PrefabInstance: {fileID: 1567616302929559955}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1567616302929559955
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4273,6 +4339,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1286721256152306438, guid: 4636ce69756ac12439e434050a96f712, type: 3}
+      propertyPath: Bullet
+      value: 
+      objectReference: {fileID: 9169371630399099201, guid: 3abef0bdc534a4c4fa98b05c71283274, type: 3}
     - target: {fileID: 1286721256152306438, guid: 4636ce69756ac12439e434050a96f712, type: 3}
       propertyPath: AmmoText
       value: 
@@ -4377,3 +4447,4 @@ SceneRoots:
   - {fileID: 296009084}
   - {fileID: 1805943826}
   - {fileID: 539419930}
+  - {fileID: 937155093}
